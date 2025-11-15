@@ -147,30 +147,106 @@ const Navbar = () =>{
 
 
         {mobileMenuOpen && (
-          <div className="absolute top-14 right-0 z-50 w-[200px] bg-richblack-800 p-4 flex flex-col gap-4 md:hidden">
+          <div className="absolute top-14 right-0 z-50 w-[250px] bg-richblack-800 p-4 flex flex-col gap-4 md:hidden">
 
+            {/* TOP NAV LINKS */}
+            <div className="flex flex-col gap-3 text-richblack-25">
+
+              {NavbarLinks.map((link, index) => (
+                <div key={index}>
+                  {/* Catalog Dropdown for mobile */}
+                  {link.title === "Catalog" ? (
+                    <div className="flex flex-col">
+                      <button
+                        className="flex items-center justify-between w-full text-left"
+                        onClick={() =>
+                          setSubLinks((prev) => ({ ...prev, open: !prev.open }))
+                        }
+                      >
+                        <span>{link.title}</span>
+                        <BsChevronDown />
+                      </button>
+
+                      {/* DROPDOWN */}
+                      {subLinks.open && (
+                        <div className="mt-2 ml-3 flex flex-col gap-2">
+                          {loading ? (
+                            <p className="text-sm text-richblack-300">Loading...</p>
+                          ) : subLinks?.length ? (
+                            subLinks
+                              ?.filter((sub) => sub?.courses?.length > 0)
+                              ?.map((sub, i) => (
+                                <Link
+                                  key={i}
+                                  to={`/catalog/${sub.name
+                                    .split(" ")
+                                    .join("-")
+                                    .toLowerCase()}`}
+                                  onClick={() => setMobileMenuOpen(false)}
+                                  className="text-richblack-200 hover:text-yellow-25"
+                                >
+                                  {sub.name}
+                                </Link>
+                              ))
+                          ) : (
+                            <p>No Courses</p>
+                          )}
+                        </div>
+                      )}
+                    </div>
+                  ) : (
+                    <Link
+                      to={link.path}
+                      onClick={() => setMobileMenuOpen(false)}
+                      className="text-richblack-25 hover:text-yellow-25"
+                    >
+                      {link.title}
+                    </Link>
+                  )}
+                </div>
+              ))}
+
+            </div>
+
+            <hr className="border-richblack-700" />
+
+            {/* CART */}
+            {user && user?.accountType !== ACCOUNT_TYPE.INSTRUCTOR && (
+              <Link
+                to="/dashboard/cart"
+                onClick={() => setMobileMenuOpen(false)}
+                className="flex items-center gap-2 text-richblack-100"
+              >
+                <AiOutlineShoppingCart className="text-xl" />
+                <span>Cart ({totalItems})</span>
+              </Link>
+            )}
+
+            {/* LOGIN / SIGNUP */}
             {token === null && (
               <>
                 <Link to="/login" onClick={() => setMobileMenuOpen(false)}>
-                  <button className="w-full rounded-lg border border-richblack-700 bg-richblack-800 px-3 py-2 text-richblack-100">
+                  <button className="w-full rounded-lg border border-richblack-700 bg-richblack-900 px-3 py-2 text-richblack-100">
                     Log in
                   </button>
                 </Link>
 
                 <Link to="/signup" onClick={() => setMobileMenuOpen(false)}>
-                  <button className="w-full rounded-lg border border-richblack-700 bg-richblack-800 px-3 py-2 text-richblack-100">
+                  <button className="w-full rounded-lg border border-richblack-700 bg-richblack-900 px-3 py-2 text-richblack-100">
                     Sign up
                   </button>
                 </Link>
               </>
             )}
 
+            {/* PROFILE DROPDOWN */}
             {token !== null && (
               <ProfileDropdown mobile={true} closeMenu={() => setMobileMenuOpen(false)} />
             )}
 
           </div>
         )}
+
 
 
       </div>
