@@ -57,58 +57,21 @@ function App() {
         <Route path="/contact" element={<Contact />} />
         <Route path="courses/:courseId" element={<CourseDetails />} />
         <Route path="catalog/:catalogName" element={<Catalog />} />
+        
         {/* Open Route - for Only Non Logged in User */}
-        <Route
-          path="login"
-          element={
-            <OpenRoute>
-              <Login />
-            </OpenRoute>
-          }
-        />
-        <Route
-          path="forgot-password"
-          element={
-            <OpenRoute>
-              <ForgotPassword />
-            </OpenRoute>
-          }
-        />
-        <Route
-          path="update-password/:id"
-          element={
-            <OpenRoute>
-              <UpdatePassword />
-            </OpenRoute>
-          }
-        />
-        <Route
-          path="signup"
-          element={
-            <OpenRoute>
-              <Signup />
-            </OpenRoute>
-          }
-        />
-        <Route
-          path="verify-email"
-          element={
-            <OpenRoute>
-              <VerifyEmail />
-            </OpenRoute>
-          }
-        />
+        <Route path="login" element={<OpenRoute><Login /></OpenRoute>}/>
+        <Route path="forgot-password" element={<OpenRoute><ForgotPassword /></OpenRoute>}/>
+        <Route path="update-password/:id" element={ <OpenRoute> <UpdatePassword /></OpenRoute>}/>
+        <Route path="signup" element={<OpenRoute><Signup /></OpenRoute>}/>
+        <Route path="verify-email" element={<OpenRoute><VerifyEmail /></OpenRoute>}/>
+        
         {/* Private Route - for Only Logged in User */}
-        <Route
-          element={
-            <PrivateRoute>
-              <Dashboard />
-            </PrivateRoute>
-          }
-        >
+        <Route element={<PrivateRoute><Dashboard /></PrivateRoute>}>
+          
           {/* Route for all users */}
           <Route path="dashboard/my-profile" element={<MyProfile />} />
           <Route path="dashboard/Settings" element={<Settings />} />
+          
           {/* Route only for Instructors */}
           {user?.accountType === ACCOUNT_TYPE.INSTRUCTOR && (
             <>
@@ -121,6 +84,7 @@ function App() {
               />
             </>
           )}
+          
           {/* Route only for Students */}
           {user?.accountType === ACCOUNT_TYPE.STUDENT && (
             <>

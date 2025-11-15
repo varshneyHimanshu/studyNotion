@@ -19,6 +19,8 @@ const Navbar = () =>{
 
   const [subLinks, setSubLinks] = useState([])
   const [loading, setLoading] = useState(false)
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+
 
   useEffect(() => {
     ;(async () => {
@@ -136,9 +138,41 @@ const Navbar = () =>{
           )}
           {token !== null && <ProfileDropdown />}
         </div>
-        <button className="mr-4 md:hidden">
+        <button
+          className="mr-4 md:hidden"
+          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+        >
           <AiOutlineMenu fontSize={24} fill="#AFB2BF" />
         </button>
+
+
+        {mobileMenuOpen && (
+          <div className="absolute top-14 right-0 z-50 w-[200px] bg-richblack-800 p-4 flex flex-col gap-4 md:hidden">
+
+            {token === null && (
+              <>
+                <Link to="/login" onClick={() => setMobileMenuOpen(false)}>
+                  <button className="w-full rounded-lg border border-richblack-700 bg-richblack-800 px-3 py-2 text-richblack-100">
+                    Log in
+                  </button>
+                </Link>
+
+                <Link to="/signup" onClick={() => setMobileMenuOpen(false)}>
+                  <button className="w-full rounded-lg border border-richblack-700 bg-richblack-800 px-3 py-2 text-richblack-100">
+                    Sign up
+                  </button>
+                </Link>
+              </>
+            )}
+
+            {token !== null && (
+              <ProfileDropdown mobile={true} closeMenu={() => setMobileMenuOpen(false)} />
+            )}
+
+          </div>
+        )}
+
+
       </div>
     </div>
   );
